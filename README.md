@@ -43,4 +43,4 @@ The 'Bad' example will return an unfiltered list of objects since the **$select*
 
 The easiest way to determine the URI passed is to investigate the command output.  The first line will show the URL as it is presented to Graph.
 
-![Example output](https://github.com/markstan/Test-IntuneFirewallRules/blob/main/Resources/results.png)
+![Example output](https://github.com/markstan/Get-IntuneGraphAPIObject/blob/main/Resources/example.png)
