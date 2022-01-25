@@ -6,9 +6,11 @@
 
 Accepts URI components in the following formats:
 
-* /deviceManagement/managedDevices
-* deviceManagement/managedDevices
-* https://graph.microsoft.com/beta/deviceManagement/managedDevices
+```powershell
+     /deviceManagement/managedDevices
+     deviceManagement/managedDevices
+     https://graph.microsoft.com/beta/deviceManagement/managedDevices
+```
 
 ## Parameters
 
