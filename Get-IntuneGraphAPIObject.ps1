@@ -58,14 +58,14 @@ function Get-AuthToken {
     
         $AadModule = Get-Module -Name "AzureAD" -ListAvailable
     
-        if ($AadModule -eq $null) {
+        if ($null -eq $AadModule) {
     
             Write-Host "AzureAD PowerShell module not found, looking for AzureADPreview"
             $AadModule = Get-Module -Name "AzureADPreview" -ListAvailable
     
         }
     
-        if ($AadModule -eq $null) {
+        if ($null -eq $AadModule) {
             write-host
             write-host "AzureAD Powershell module not installed..." -f Red
             write-host "Install by running 'Install-Module AzureAD' or 'Install-Module AzureADPreview' from an elevated PowerShell prompt" -f Yellow
@@ -79,15 +79,15 @@ function Get-AuthToken {
     
         if($AadModule.count -gt 1){
     
-            $Latest_Version = ($AadModule | select version | Sort-Object)[-1]
+            $Latest_Version = ($AadModule | Select-Object version | Sort-Object)[-1]
     
-            $aadModule = $AadModule | ? { $_.version -eq $Latest_Version.version }
+            $aadModule = $AadModule | Where-Object { $_.version -eq $Latest_Version.version }
     
                 # Checking if there are multiple versions of the same module found
     
                 if($AadModule.count -gt 1){
     
-                $aadModule = $AadModule | select -Unique
+                $aadModule = $AadModule | Select-Object -Unique
     
                 }
     
@@ -202,9 +202,12 @@ function Get-AuthToken {
          
         
             $uri = "https://graph.microsoft.com/$graphApiVersion/$Resource"
-    
+            # URI like https://graph.microsoft.com/beta/deviceManagement/managedDevices/11111111-2222-3333-4444-555555555555
+            $GUIDRegex =  ".*[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$"
             # URI like https://graph.microsoft.com/beta/deviceManagement/managedDevices('11111111-2222-3333-4444-555555555555')
-            if ($uri -match  ".*\(\'.*\'\).*" ){
+            $QuotedParameterRegex = ".*\(\'.*\'\).*"
+     
+            if ( ($uri -match $QuotedParameterRegex  ) -or ($uri -match $GUIDRegex) ) {
                 Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get
             }
             else {
@@ -273,7 +276,7 @@ function Get-AuthToken {
     
                 # Defining User Principal Name if not present
     
-                if($User -eq $null -or $User -eq ""){
+                if($null -eq $User -or $User -eq ""){
     
                 $User = Read-Host -Prompt "Please specify your user principal name for Azure Authentication"
                 Write-Host
@@ -289,7 +292,7 @@ function Get-AuthToken {
     
     else {
     
-        if($User -eq $null -or $User -eq ""){
+        if($null -eq $User -or $User -eq ""){
     
         $User = Read-Host -Prompt "Please specify your user principal name for Azure Authentication"
         Write-Host
@@ -310,9 +313,17 @@ function Get-AuthToken {
     Write-Output "Querying Graph for object `"https://graph.microsoft.com/$graphApiVersion/$validatedPath`"."
 
     $objects = Get-REST_URI -ObjectName $validatedPath
-    Write-Output "$($objects.count) objects returned from Graph API"
 
-    foreach ($object in $objects){
-        Write-Output $object
-        Write-Output ""
+    if ($objects.GetType() -eq "PSCustomObject") {        
+        Write-Output "1 object returned from Graph API"
+        $objects
+    }
+    else {
+         Write-Output "$($objects.count) objects returned from Graph API"
+
+
+         foreach ($object in $objects){
+            Write-Output $object
+            Write-Output ""
+        }
     }
