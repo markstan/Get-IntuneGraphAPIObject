@@ -17,6 +17,7 @@ Accepts URI components in the following formats:
 
 ## Examples
 
+```powershell
 ./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "/deviceManagement/managedDevices"
 
 ./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "/users"
@@ -28,6 +29,7 @@ Accepts URI components in the following formats:
 ./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath deviceManagement/windowsAutopilotDeploymentProfiles
 
 ./Get-IntuneGraphAPIObject.ps1-GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+```
 
 ## Helpful hints
 
@@ -35,12 +37,35 @@ Accepts URI components in the following formats:
 
 Remember to escape special characters in your path using standard PowerShell syntax. When in doubt, pass filter parameters enclosed in single quotes to avoid variable expansion.
 
-Good: ./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+Good: 
 
-Bad: ./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "deviceManagement/windowsAutopilotDeploymentProfiles?$select=id"
+```PowerShell 
+./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+```
+
+Bad: 
+```PowerShell 
+./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "deviceManagement/windowsAutopilotDeploymentProfiles?$select=id"
+```
 
 The 'Bad' example will return an unfiltered list of objects since the **$select** parameter will be interpretted as a null string (i.e. the URI passed is actually "https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeploymentProfiles?=id").
 
 The easiest way to determine the URI passed is to investigate the command output.  The first line will show the URL as it is presented to Graph.
 
 ![Example output](https://github.com/markstan/Get-IntuneGraphAPIObject/blob/main/Resources/example.png)
+
+### Execution policy
+
+If you run this command on a device where you have not configured your PowerShell execution policy from the default settings, you will receive an error message similar to this:
+
+```none
+File C:\temp\Microsoft.PowerShell_profile.ps1 cannot be loaded because running scripts is disabled on this system. 
+For more information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+```
+
+To get past this error, run either set the executionpolicy to 'RemoteSigned' (i.e. run 'Set-ExecutionPolicy RemoteSigned' from an elevated PowerShell window) or else run the script like this:
+
+```powershell
+powershell.exe -executionpolicy RemoteSigned -File .\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id
+```
+ 
