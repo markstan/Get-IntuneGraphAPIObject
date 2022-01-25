@@ -203,7 +203,13 @@ function Get-AuthToken {
         
             $uri = "https://graph.microsoft.com/$graphApiVersion/$Resource"
     
-            (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            # URI like https://graph.microsoft.com/beta/deviceManagement/managedDevices('11111111-2222-3333-4444-555555555555')
+            if ($uri -match  ".*\(\'.*\'\).*" ){
+                Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get
+            }
+            else {
+                 (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            }
         
         }
     
