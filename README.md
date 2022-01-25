@@ -11,6 +11,8 @@ Accepts URI components in the following formats:
      deviceManagement/managedDevices
      https://graph.microsoft.com/beta/deviceManagement/managedDevices
      'deviceManagement/managedDevices?$select=deviceName, model'
+      deviceManagement/managedDevices/11111111-2222-3333-4444-555555555555
+      deviceManagement/managedDevices('11111111-2222-3333-4444-555555555555')
 ```
 
 ## Parameters
@@ -21,19 +23,21 @@ Accepts URI components in the following formats:
 ## Examples
 
 ```powershell
-./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "/deviceManagement/managedDevices"
+.\Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "/deviceManagement/managedDevices"
 
-./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "/users"
+.\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "/users"
 
-./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "https://graph.microsoft.com/beta/deviceManagement/managedDevices"
+.\Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "https://graph.microsoft.com/beta/deviceManagement/managedDevices"
 
-.Get-IntuneGraphAPIObject.ps1 -GraphObjectPath 'deviceManagement/managedDevices?$select=deviceName, model'
+.\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath 'deviceManagement/managedDevices?$select=deviceName, model'
 
-./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "deviceManagement/managedDevices" -graphApiVersion "v1.0"
+.\Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "deviceManagement/managedDevices" -graphApiVersion "v1.0"
 
-./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath deviceManagement/windowsAutopilotDeploymentProfiles
+.\Get-IntuneGraphAPIObject.ps1  -GraphObjectPath deviceManagement/windowsAutopilotDeploymentProfiles
 
-./Get-IntuneGraphAPIObject.ps1-GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+.\Get-IntuneGraphAPIObject.ps1-GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+
+.\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "https://graph.microsoft.com/beta/deviceManagement/managedDevices/11111111-2222-3333-4444-555555555555"
 ```
 
 ## Helpful hints
@@ -45,12 +49,12 @@ Remember to escape special characters in your path using standard PowerShell syn
 Good: 
 
 ```PowerShell 
-./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
+.\Get-IntuneGraphAPIObject.ps1  -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id'
 ```
 
 Bad: 
 ```PowerShell 
-./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "deviceManagement/windowsAutopilotDeploymentProfiles?$select=id"
+.\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "deviceManagement/windowsAutopilotDeploymentProfiles?$select=id"
 ```
 
 The 'Bad' example will return an unfiltered list of objects since the **$select** parameter will be interpretted as a null string (i.e. the URI passed is actually "https://graph.microsoft.com/beta/deviceManagement/windowsAutopilotDeploymentProfiles?=id").
