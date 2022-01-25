@@ -10,6 +10,7 @@ Accepts URI components in the following formats:
      /deviceManagement/managedDevices
      deviceManagement/managedDevices
      https://graph.microsoft.com/beta/deviceManagement/managedDevices
+     'deviceManagement/managedDevices?$select=deviceName, model'
 ```
 
 ## Parameters
@@ -25,6 +26,8 @@ Accepts URI components in the following formats:
 ./Get-IntuneGraphAPIObject.ps1 -GraphObjectPath "/users"
 
 ./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "https://graph.microsoft.com/beta/deviceManagement/managedDevices"
+
+.Get-IntuneGraphAPIObject.ps1 -GraphObjectPath 'deviceManagement/managedDevices?$select=deviceName, model'
 
 ./Get-IntuneGraphAPIObject.ps1  -GraphObjectPath "deviceManagement/managedDevices" -graphApiVersion "v1.0"
 
@@ -71,3 +74,10 @@ To get past this error, run either set the executionpolicy to 'RemoteSigned' (i.
 powershell.exe -executionpolicy RemoteSigned -File .\Get-IntuneGraphAPIObject.ps1 -GraphObjectPath 'deviceManagement/windowsAutopilotDeploymentProfiles?$select=id
 ```
  
+### Download the script
+
+I will add this to the PowerShell Gallery in the near future.  In the meantime, you can download the script by running this command:
+
+```powershell
+wget "https://aka.ms/IGAO" -OutFile .\Get-IntuneGraphAPIObject.ps1 
+```
